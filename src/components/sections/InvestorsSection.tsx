@@ -16,12 +16,18 @@ const InvestorsSection = () => {
           {/* Illustration (Left) */}
           <div className="relative order-2 lg:order-1">
             <div className="bg-white rounded-lg p-8 relative z-10 shadow-md">
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex justify-between items-center mb-2">
                 <h4 className="font-bold text-text text-xl">Investment Growth</h4>
                 <span className="text-accent font-bold">+14%</span>
               </div>
               
-              <div className="h-60 bg-primary/20 rounded-lg mb-6 flex items-end p-4">
+              {/* Add prominent growth amount at the top */}
+              <div className="bg-accent/10 p-4 rounded-lg mb-4 text-center">
+                <p className="text-text-secondary mb-1">Total Value After 5 Years</p>
+                <p className="text-accent text-2xl font-bold">₹{Math.round(finalValue).toLocaleString()}</p>
+              </div>
+              
+              <div className="h-48 bg-primary/20 rounded-lg mb-6 flex items-end p-4">
                 <div className="w-1/6 h-[20%] bg-secondary mr-2 rounded-t-md"></div>
                 <div className="w-1/6 h-[35%] bg-secondary mr-2 rounded-t-md"></div>
                 <div className="w-1/6 h-[50%] bg-secondary mr-2 rounded-t-md"></div>
@@ -32,7 +38,7 @@ const InvestorsSection = () => {
               
               <div className="flex justify-between text-sm text-text-secondary">
                 <span>₹1,00,000</span>
-                <span>₹{Math.round(finalValue).toLocaleString()}</span>
+                <span>5 Years</span>
               </div>
               
               <div className="mt-6 grid grid-cols-2 gap-4">
