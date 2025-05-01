@@ -64,9 +64,14 @@ const CTASection = () => {
           <h4 className="text-2xl font-bold text-text mb-6">
             Join Green-Nxt today. Let's power the future, together.
           </h4>
-          <button className="btn btn-primary text-lg px-8 py-4">
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSewRvfNN9EaSRmqtFpAL2hQ7-SXJ7icE_-n1B-4Ix9tFFOFSw/viewform?usp=header" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="btn btn-primary text-lg px-8 py-4"
+          >
             Get Started
-          </button>
+          </a>
         </div>
       </div>
     </section>

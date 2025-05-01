@@ -48,7 +48,14 @@ const CalculatorPage = ({ type }: CalculatorPageProps) => {
                   ? "Ready to start saving? Let's discuss your specific energy needs."
                   : "Ready to invest? Let's talk about your investment goals."}
               </p>
-              <button className="btn btn-primary">Contact Us</button>
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSewRvfNN9EaSRmqtFpAL2hQ7-SXJ7icE_-n1B-4Ix9tFFOFSw/viewform?usp=header" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-primary"
+              >
+                Contact Us
+              </a>
             </div>
           </div>
         </div>

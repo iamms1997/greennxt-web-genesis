@@ -40,7 +40,14 @@ const Header = () => {
           <Link to="/#msme" className="font-poppins text-text hover:text-accent transition-colors">MSMEs</Link>
           <Link to="/#investors" className="font-poppins text-text hover:text-accent transition-colors">Investors</Link>
           <Link to="/#about" className="font-poppins text-text hover:text-accent transition-colors">About</Link>
-          <button className="btn btn-primary">Contact Us</button>
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSewRvfNN9EaSRmqtFpAL2hQ7-SXJ7icE_-n1B-4Ix9tFFOFSw/viewform?usp=header" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="btn btn-primary"
+          >
+            Contact Us
+          </a>
         </nav>
         
         <button onClick={toggleMenu} className="block md:hidden text-text">
@@ -56,7 +63,14 @@ const Header = () => {
             <Link to="/#msme" className="font-poppins text-text hover:text-accent transition-colors py-2" onClick={toggleMenu}>MSMEs</Link>
             <Link to="/#investors" className="font-poppins text-text hover:text-accent transition-colors py-2" onClick={toggleMenu}>Investors</Link>
             <Link to="/#about" className="font-poppins text-text hover:text-accent transition-colors py-2" onClick={toggleMenu}>About</Link>
-            <button className="btn btn-primary w-full">Contact Us</button>
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLSewRvfNN9EaSRmqtFpAL2hQ7-SXJ7icE_-n1B-4Ix9tFFOFSw/viewform?usp=header" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-primary w-full"
+            >
+              Contact Us
+            </a>
           </div>
         </div>
       )}
