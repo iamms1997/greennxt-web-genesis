@@ -1,6 +1,8 @@
 
 import { useState } from "react";
-import { Calculator as CalcIcon } from "lucide-react";
+import { Calculator as CalcIcon, ArrowDown } from "lucide-react";
+import { Input } from "./ui/input";
+import { Slider } from "./ui/slider";
 
 interface CalculatorProps {
   type: "msme" | "investor";
@@ -27,6 +29,14 @@ const Calculator = ({ type }: CalculatorProps) => {
   const totalReturn = annualReturn * years;
   const totalValue = investmentAmount + totalReturn;
 
+  // Handle input change for investor amount
+  const handleInvestmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value === '' ? 0 : parseInt(e.target.value);
+    if (!isNaN(value)) {
+      setInvestmentAmount(value);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6 md:p-8 max-w-full overflow-hidden">
       <div className="flex items-center mb-6">
@@ -42,20 +52,23 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="monthly-bill" className="block text-text-secondary mb-2">
               Your Current Monthly Electricity Bill (₹)
             </label>
-            <input
-              type="range"
-              id="monthly-bill"
-              min="5000"
-              max="100000"
-              step="1000"
-              value={monthlyBill}
-              onChange={(e) => setMonthlyBill(parseInt(e.target.value))}
-              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between mt-2">
-              <span className="text-text-secondary">₹5,000</span>
-              <span className="text-text font-semibold">₹{monthlyBill.toLocaleString()}</span>
-              <span className="text-text-secondary">₹100,000</span>
+            <div className="mt-6 mb-2">
+              <Slider
+                id="monthly-bill"
+                min={5000}
+                max={100000}
+                step={1000}
+                value={[monthlyBill]}
+                onValueChange={values => setMonthlyBill(values[0])}
+                className="mb-6"
+              />
+              <div className="flex justify-between mt-2 relative">
+                <span className="text-text-secondary">₹5,000</span>
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                  <span className="text-text font-semibold">₹{monthlyBill.toLocaleString()}</span>
+                </div>
+                <span className="text-text-secondary">₹100,000</span>
+              </div>
             </div>
           </div>
 
@@ -63,20 +76,23 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="terrace-area" className="block text-text-secondary mb-2">
               Terrace Area (sq ft)
             </label>
-            <input
-              type="range"
-              id="terrace-area"
-              min="500"
-              max="10000"
-              step="100"
-              value={terraceArea}
-              onChange={(e) => setTerraceArea(parseInt(e.target.value))}
-              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between mt-2">
-              <span className="text-text-secondary">500 sq ft</span>
-              <span className="text-text font-semibold">{terraceArea.toLocaleString()} sq ft</span>
-              <span className="text-text-secondary">10,000 sq ft</span>
+            <div className="mt-6 mb-2">
+              <Slider
+                id="terrace-area"
+                min={500}
+                max={10000}
+                step={100}
+                value={[terraceArea]}
+                onValueChange={values => setTerraceArea(values[0])}
+                className="mb-6"
+              />
+              <div className="flex justify-between mt-2 relative">
+                <span className="text-text-secondary">500 sq ft</span>
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                  <span className="text-text font-semibold">{terraceArea.toLocaleString()} sq ft</span>
+                </div>
+                <span className="text-text-secondary">10,000 sq ft</span>
+              </div>
             </div>
           </div>
 
@@ -84,20 +100,23 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="cost-per-unit" className="block text-text-secondary mb-2">
               Current Electricity Cost (₹ per unit)
             </label>
-            <input
-              type="range"
-              id="cost-per-unit"
-              min="5"
-              max="15"
-              step="0.5"
-              value={costPerUnit}
-              onChange={(e) => setCostPerUnit(parseFloat(e.target.value))}
-              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between mt-2">
-              <span className="text-text-secondary">₹5</span>
-              <span className="text-text font-semibold">₹{costPerUnit.toLocaleString()}</span>
-              <span className="text-text-secondary">₹15</span>
+            <div className="mt-6 mb-2">
+              <Slider
+                id="cost-per-unit"
+                min={5}
+                max={15}
+                step={0.5}
+                value={[costPerUnit]}
+                onValueChange={values => setCostPerUnit(values[0])}
+                className="mb-6"
+              />
+              <div className="flex justify-between mt-2 relative">
+                <span className="text-text-secondary">₹5</span>
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                  <span className="text-text font-semibold">₹{costPerUnit.toLocaleString()}</span>
+                </div>
+                <span className="text-text-secondary">₹15</span>
+              </div>
             </div>
           </div>
           
@@ -124,20 +143,44 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="investment-amount" className="block text-text-secondary mb-2">
               Investment Amount (₹)
             </label>
-            <input
-              type="range"
-              id="investment-amount"
-              min="10000"
-              max="1000000"
-              step="10000"
-              value={investmentAmount}
-              onChange={(e) => setInvestmentAmount(parseInt(e.target.value))}
-              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between mt-2">
-              <span className="text-text-secondary">₹10,000</span>
-              <span className="text-text font-semibold">₹{investmentAmount.toLocaleString()}</span>
-              <span className="text-text-secondary">₹1,000,000</span>
+            <div className="flex items-center gap-4">
+              <Input
+                type="number"
+                id="investment-amount"
+                min="10000"
+                max="10000000"
+                step="10000"
+                value={investmentAmount}
+                onChange={handleInvestmentChange}
+                className="text-lg font-medium"
+              />
+              <div className="flex flex-col">
+                <span className="text-xs text-text-secondary">Default: ₹1,00,000</span>
+                <button 
+                  onClick={() => setInvestmentAmount(100000)}
+                  className="text-xs text-accent hover:underline"
+                >
+                  Reset to default
+                </button>
+              </div>
+            </div>
+            <div className="mt-4 mb-2">
+              <Slider
+                id="investment-slider"
+                min={10000}
+                max={1000000}
+                step={10000}
+                value={[investmentAmount]}
+                onValueChange={values => setInvestmentAmount(values[0])}
+                className="mb-6"
+              />
+              <div className="flex justify-between mt-2 relative">
+                <span className="text-text-secondary">₹10,000</span>
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                  <span className="text-text font-semibold">₹{investmentAmount.toLocaleString()}</span>
+                </div>
+                <span className="text-text-secondary">₹10,00,000</span>
+              </div>
             </div>
           </div>
           
