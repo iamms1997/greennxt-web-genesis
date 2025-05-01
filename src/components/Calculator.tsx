@@ -16,9 +16,9 @@ const Calculator = ({ type }: CalculatorProps) => {
   const [investmentAmount, setInvestmentAmount] = useState(100000);
   const [years, setYears] = useState(5);
   
-  // MSME calculations
+  // MSME calculations with updated formula
   const potentialCapacity = terraceArea / 500; // How many units can be generated
-  const monthlySavings = potentialCapacity * costPerUnit / 2;
+  const monthlySavings = potentialCapacity * 30 * 5 * (costPerUnit / 2);
   const annualSavings = monthlySavings * 12;
   
   // Investor calculations with fixed 14% annual return
