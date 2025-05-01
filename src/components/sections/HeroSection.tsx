@@ -24,9 +24,14 @@ const HeroSection = () => {
           <p className="text-lg md:text-xl text-text-secondary mb-10 max-w-3xl mx-auto">
             Green-Nxt is reshaping the future of energy. We provide zero-cost solar solutions for MSMEs while creating a high-yield, asset-backed investment opportunity for individuals. A win-win for businesses, investors, and the planet.
           </p>
-          <button className="btn btn-primary text-lg px-8 py-4">
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSewRvfNN9EaSRmqtFpAL2hQ7-SXJ7icE_-n1B-4Ix9tFFOFSw/viewform?usp=header" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="btn btn-primary text-lg px-8 py-4"
+          >
             Join the Green Revolution
-          </button>
+          </a>
         </div>
       </div>
       
