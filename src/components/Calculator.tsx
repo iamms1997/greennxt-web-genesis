@@ -7,17 +7,23 @@ interface CalculatorProps {
 }
 
 const Calculator = ({ type }: CalculatorProps) => {
+  // MSME calculation fields
   const [monthlyBill, setMonthlyBill] = useState(10000);
+  const [terraceArea, setTerraceArea] = useState(1000);
+  const [costPerUnit, setCostPerUnit] = useState(8);
+  
+  // Investor calculation fields
   const [investmentAmount, setInvestmentAmount] = useState(100000);
   const [years, setYears] = useState(5);
   
   // MSME calculations
-  const monthlySavings = monthlyBill * 0.5; // 50% savings
+  const potentialCapacity = terraceArea / 500; // How many units can be generated
+  const monthlySavings = potentialCapacity * costPerUnit / 2;
   const annualSavings = monthlySavings * 12;
-  const totalSavings = annualSavings * 5; // 5 years
   
-  // Investor calculations
-  const annualReturn = investmentAmount * 0.16; // 16% return
+  // Investor calculations with fixed 14% annual return
+  const annualReturn = investmentAmount * 0.14; // 14% return
+  const monthlyReturn = annualReturn / 12; // Monthly interest payout
   const totalReturn = annualReturn * years;
   const totalValue = investmentAmount + totalReturn;
 
@@ -52,21 +58,63 @@ const Calculator = ({ type }: CalculatorProps) => {
               <span className="text-text-secondary">₹100,000</span>
             </div>
           </div>
+
+          <div className="mb-6">
+            <label htmlFor="terrace-area" className="block text-text-secondary mb-2">
+              Terrace Area (sq ft)
+            </label>
+            <input
+              type="range"
+              id="terrace-area"
+              min="500"
+              max="10000"
+              step="100"
+              value={terraceArea}
+              onChange={(e) => setTerraceArea(parseInt(e.target.value))}
+              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
+            />
+            <div className="flex justify-between mt-2">
+              <span className="text-text-secondary">500 sq ft</span>
+              <span className="text-text font-semibold">{terraceArea.toLocaleString()} sq ft</span>
+              <span className="text-text-secondary">10,000 sq ft</span>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="cost-per-unit" className="block text-text-secondary mb-2">
+              Current Electricity Cost (₹ per unit)
+            </label>
+            <input
+              type="range"
+              id="cost-per-unit"
+              min="5"
+              max="15"
+              step="0.5"
+              value={costPerUnit}
+              onChange={(e) => setCostPerUnit(parseFloat(e.target.value))}
+              className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer"
+            />
+            <div className="flex justify-between mt-2">
+              <span className="text-text-secondary">₹5</span>
+              <span className="text-text font-semibold">₹{costPerUnit.toLocaleString()}</span>
+              <span className="text-text-secondary">₹15</span>
+            </div>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Monthly Savings</p>
-              <p className="text-accent text-2xl font-bold">₹{monthlySavings.toLocaleString()}</p>
+              <p className="text-accent text-2xl font-bold">₹{monthlySavings.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             </div>
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Annual Savings</p>
-              <p className="text-accent text-2xl font-bold">₹{annualSavings.toLocaleString()}</p>
+              <p className="text-accent text-2xl font-bold">₹{annualSavings.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             </div>
           </div>
           
           <div className="bg-secondary/50 p-6 rounded-lg text-center">
             <p className="text-text-secondary mb-2">Estimated 5-Year Savings</p>
-            <p className="text-accent text-3xl font-bold">₹{totalSavings.toLocaleString()}</p>
+            <p className="text-accent text-3xl font-bold">₹{(annualSavings * 5).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             <p className="text-text-secondary mt-2 text-sm">With Zero Upfront Cost</p>
           </div>
         </>
@@ -116,19 +164,19 @@ const Calculator = ({ type }: CalculatorProps) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-primary/50 p-4 rounded-lg">
-              <p className="text-text-secondary">Annual Return (16%)</p>
+              <p className="text-text-secondary">Annual Return (14%)</p>
               <p className="text-accent text-2xl font-bold">₹{annualReturn.toLocaleString()}</p>
             </div>
             <div className="bg-primary/50 p-4 rounded-lg">
-              <p className="text-text-secondary">Total Returns ({years} years)</p>
-              <p className="text-accent text-2xl font-bold">₹{totalReturn.toLocaleString()}</p>
+              <p className="text-text-secondary">Monthly Interest</p>
+              <p className="text-accent text-2xl font-bold">₹{monthlyReturn.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             </div>
           </div>
           
           <div className="bg-secondary/50 p-6 rounded-lg text-center">
             <p className="text-text-secondary mb-2">Total Value After {years} Years</p>
             <p className="text-accent text-3xl font-bold">₹{totalValue.toLocaleString()}</p>
-            <p className="text-text-secondary mt-2 text-sm">Secured by Solar Assets</p>
+            <p className="text-text-secondary mt-2 text-sm">Interest paid monthly, secured by Solar Assets</p>
           </div>
         </>
       )}
