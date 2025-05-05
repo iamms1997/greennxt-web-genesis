@@ -5,19 +5,25 @@ const founders = [
   {
     name: "Mohit Srivastava",
     position: "Co-Founder & CEO",
-    linkedin: "https://linkedin.com/in/mohit-srivastava",
+    linkedin: "https://www.linkedin.com/in/mohit-srivastava-72640314b/",
     image: null
   },
   {
     name: "Priyank Inani",
     position: "Co-Founder & CTO",
-    linkedin: "https://linkedin.com/in/priyank-inani",
+    linkedin: "https://www.linkedin.com/in/priyank-inani/",
     image: null
   },
   {
     name: "Utsav Pandey",
     position: "Co-Founder & COO",
-    linkedin: "https://linkedin.com/in/utsav-pandey",
+    linkedin: "https://www.linkedin.com/in/utsavpandey02/",
+    image: null
+  },
+  {
+    name: "Harshit Agrawal",
+    position: "Co-Founder & CFO",
+    linkedin: "https://www.linkedin.com/in/harshitnitt/",
     image: null
   }
 ];
@@ -33,7 +39,7 @@ const AboutSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {founders.map((founder, index) => (
             <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden transition-transform duration-300 hover:transform hover:scale-105">
               <div className="h-56 bg-secondary flex items-center justify-center">

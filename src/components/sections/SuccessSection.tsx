@@ -16,8 +16,12 @@ const SuccessSection = () => {
           {/* Success Image */}
           <div className="relative">
             <div className="rounded-lg overflow-hidden relative z-10">
-              <div className="aspect-w-4 aspect-h-3 bg-secondary flex items-center justify-center">
-                <Building className="h-20 w-20 text-accent opacity-70" />
+              <div className="aspect-w-4 aspect-h-3 bg-secondary">
+                <img 
+                  src="https://images.unsplash.com/photo-1487958449943-2429e8be8625" 
+                  alt="Textile Factory in Gujarat" 
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
             
@@ -43,7 +47,7 @@ const SuccessSection = () => {
                   <TrendingUp className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-text font-medium">Saved 50% on electricity costs within six months.</p>
+                  <p className="text-text font-medium">Saved 50% on electricity costs from day one without any upfront investment.</p>
                 </div>
               </div>
               
@@ -52,7 +56,7 @@ const SuccessSection = () => {
                   <Sun className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-text font-medium">Achieved full solar dependency, ensuring energy reliability.</p>
+                  <p className="text-text font-medium">Annual savings of ₹2.4 lakhs, totaling ₹24 lakhs over 10 years.</p>
                 </div>
               </div>
               
@@ -61,7 +65,7 @@ const SuccessSection = () => {
                   <Building className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-text font-medium">Zero upfront investment for long-term savings.</p>
+                  <p className="text-text font-medium">Achieved energy independence with zero additional costs beyond the subscription.</p>
                 </div>
               </div>
             </div>
