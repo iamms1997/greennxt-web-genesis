@@ -3,9 +3,9 @@ import { Check, BarChart, LockKeyhole, DollarSign, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const InvestorsSection = () => {
-  // Calculate growth for 1 lakh over 5 years at 14% annually
+  // Calculate growth for 1 lakh over 5 years at 12% annually
   const initialInvestment = 100000;
-  const annualRate = 0.14;
+  const annualRate = 0.12;
   const years = 5;
   const finalValue = initialInvestment + (initialInvestment * annualRate * years);
   
@@ -18,7 +18,7 @@ const InvestorsSection = () => {
             <div className="bg-white rounded-lg p-8 relative z-10 shadow-md">
               <div className="flex justify-between items-center mb-2">
                 <h4 className="font-bold text-text text-xl">Investment Growth</h4>
-                <span className="text-accent font-bold">+14%</span>
+                <span className="text-accent font-bold">+12%</span>
               </div>
               
               {/* Add prominent growth amount at the top */}
@@ -44,7 +44,7 @@ const InvestorsSection = () => {
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="border border-secondary rounded-md p-3">
                   <p className="text-text-secondary text-sm">Annual Return</p>
-                  <p className="text-text font-bold text-xl">14%</p>
+                  <p className="text-text font-bold text-xl">12%</p>
                 </div>
                 <div className="border border-secondary rounded-md p-3">
                   <p className="text-text-secondary text-sm">Monthly Payouts</p>
@@ -74,7 +74,7 @@ const InvestorsSection = () => {
                   <Check className="h-4 w-4 text-accent" />
                 </div>
                 <div>
-                  <span className="font-bold text-text">14% Annual Returns</span>
+                  <span className="font-bold text-text">12% Annual Returns</span>
                   <p className="text-text-secondary">With monthly interest payments directly to your account.</p>
                 </div>
               </li>

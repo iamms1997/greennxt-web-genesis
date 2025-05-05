@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Calculator as CalcIcon, ArrowDown } from "lucide-react";
+import { Calculator as CalcIcon, ArrowDown, IndianRupee } from "lucide-react";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 
@@ -17,6 +17,7 @@ const Calculator = ({ type }: CalculatorProps) => {
   
   // Investor calculation fields
   const [investmentAmount, setInvestmentAmount] = useState(100000);
+  const [investmentInputValue, setInvestmentInputValue] = useState("100000");
   const [years, setYears] = useState(5);
   
   // MSME calculations with updated formula based on the new logic:
@@ -30,16 +31,21 @@ const Calculator = ({ type }: CalculatorProps) => {
   const monthlySavings = Math.min(potentialMonthlySavings, maxPossibleSavings);
   const annualSavings = monthlySavings * 12;
   
-  // Investor calculations with fixed 14% annual return
-  const annualReturn = investmentAmount * 0.14; // 14% return
-  const monthlyReturn = annualReturn / 12; // Monthly interest payout
+  // Investor calculations with 12% annual return (changed from 14%)
+  const annualRate = 0.12; // Changed from 0.14
+  const annualReturn = investmentAmount * annualRate;
+  const monthlyReturn = annualReturn / 12;
   const totalReturn = annualReturn * years;
   const totalValue = investmentAmount + totalReturn;
 
-  // Sync the input value with the slider value
+  // Sync the input values with the slider values
   useEffect(() => {
     setBillInputValue(monthlyBill.toString());
   }, [monthlyBill]);
+
+  useEffect(() => {
+    setInvestmentInputValue(investmentAmount.toString());
+  }, [investmentAmount]);
 
   // Handle direct input change for monthly bill
   const handleBillInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,9 +75,27 @@ const Calculator = ({ type }: CalculatorProps) => {
 
   // Handle input change for investor amount
   const handleInvestmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === '' ? 0 : parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setInvestmentAmount(value);
+    const value = e.target.value;
+    setInvestmentInputValue(value);
+    
+    const numericValue = value === '' ? 0 : parseInt(value);
+    if (!isNaN(numericValue)) {
+      // Clamp the value between min and max
+      const clampedValue = Math.min(Math.max(numericValue, 10000), 1000000);
+      setInvestmentAmount(clampedValue);
+    }
+  };
+
+  // Handle blur event for investment input
+  const handleInvestmentBlur = () => {
+    const numericValue = investmentInputValue === '' ? 0 : parseInt(investmentInputValue);
+    if (!isNaN(numericValue)) {
+      const clampedValue = Math.min(Math.max(numericValue, 10000), 1000000);
+      setInvestmentAmount(clampedValue);
+      setInvestmentInputValue(clampedValue.toString());
+    } else {
+      setInvestmentAmount(100000);
+      setInvestmentInputValue("100000");
     }
   };
 
@@ -92,7 +116,10 @@ const Calculator = ({ type }: CalculatorProps) => {
             </label>
             
             {/* Direct input field */}
-            <div className="mb-4">
+            <div className="mb-4 relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <IndianRupee className="h-5 w-5 text-text-secondary" />
+              </div>
               <Input
                 type="number"
                 id="monthly-bill-input"
@@ -101,7 +128,7 @@ const Calculator = ({ type }: CalculatorProps) => {
                 onBlur={handleBillInputBlur}
                 min={5000}
                 max={1000000}
-                className="text-lg font-medium"
+                className="text-lg font-medium pl-10"
                 placeholder="Enter monthly bill"
               />
             </div>
@@ -197,26 +224,21 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="investment-amount" className="block text-text-secondary mb-2">
               Investment Amount (₹)
             </label>
-            <div className="flex items-center gap-4">
+            <div className="mb-4 relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <IndianRupee className="h-5 w-5 text-text-secondary" />
+              </div>
               <Input
                 type="number"
-                id="investment-amount"
-                min="10000"
-                max="10000000"
-                step="10000"
-                value={investmentAmount}
+                id="investment-amount-input"
+                value={investmentInputValue}
                 onChange={handleInvestmentChange}
-                className="text-lg font-medium"
+                onBlur={handleInvestmentBlur}
+                min={10000}
+                max={1000000}
+                className="text-lg font-medium pl-10"
+                placeholder="Enter investment amount"
               />
-              <div className="flex flex-col">
-                <span className="text-xs text-text-secondary">Default: ₹1,00,000</span>
-                <button 
-                  onClick={() => setInvestmentAmount(100000)}
-                  className="text-xs text-accent hover:underline"
-                >
-                  Reset to default
-                </button>
-              </div>
             </div>
             <div className="mt-4 mb-2">
               <Slider
@@ -261,7 +283,7 @@ const Calculator = ({ type }: CalculatorProps) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-primary/50 p-4 rounded-lg">
-              <p className="text-text-secondary">Annual Return (14%)</p>
+              <p className="text-text-secondary">Annual Return (12%)</p>
               <p className="text-accent text-2xl font-bold">₹{annualReturn.toLocaleString()}</p>
             </div>
             <div className="bg-primary/50 p-4 rounded-lg">
