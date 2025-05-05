@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calculator as CalcIcon, ArrowDown } from "lucide-react";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
@@ -13,6 +13,7 @@ const Calculator = ({ type }: CalculatorProps) => {
   const [monthlyBill, setMonthlyBill] = useState(10000);
   const [terraceArea, setTerraceArea] = useState(1000);
   const [costPerUnit, setCostPerUnit] = useState(8);
+  const [billInputValue, setBillInputValue] = useState("10000");
   
   // Investor calculation fields
   const [investmentAmount, setInvestmentAmount] = useState(100000);
@@ -28,6 +29,37 @@ const Calculator = ({ type }: CalculatorProps) => {
   const monthlyReturn = annualReturn / 12; // Monthly interest payout
   const totalReturn = annualReturn * years;
   const totalValue = investmentAmount + totalReturn;
+
+  // Sync the input value with the slider value
+  useEffect(() => {
+    setBillInputValue(monthlyBill.toString());
+  }, [monthlyBill]);
+
+  // Handle direct input change for monthly bill
+  const handleBillInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setBillInputValue(value);
+    
+    const numericValue = value === '' ? 0 : parseInt(value);
+    if (!isNaN(numericValue)) {
+      // Clamp the value between min and max
+      const clampedValue = Math.min(Math.max(numericValue, 5000), 1000000);
+      setMonthlyBill(clampedValue);
+    }
+  };
+
+  // Handle blur event to ensure the input value is within range
+  const handleBillInputBlur = () => {
+    const numericValue = billInputValue === '' ? 0 : parseInt(billInputValue);
+    if (!isNaN(numericValue)) {
+      const clampedValue = Math.min(Math.max(numericValue, 5000), 1000000);
+      setMonthlyBill(clampedValue);
+      setBillInputValue(clampedValue.toString());
+    } else {
+      setMonthlyBill(10000);
+      setBillInputValue("10000");
+    }
+  };
 
   // Handle input change for investor amount
   const handleInvestmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,22 +84,38 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="monthly-bill" className="block text-text-secondary mb-2">
               Your Current Monthly Electricity Bill (₹)
             </label>
+            
+            {/* Direct input field */}
+            <div className="mb-4">
+              <Input
+                type="number"
+                id="monthly-bill-input"
+                value={billInputValue}
+                onChange={handleBillInputChange}
+                onBlur={handleBillInputBlur}
+                min={5000}
+                max={1000000}
+                className="text-lg font-medium"
+                placeholder="Enter monthly bill"
+              />
+            </div>
+            
             <div className="mt-6 mb-2">
               <Slider
                 id="monthly-bill"
                 min={5000}
-                max={100000}
+                max={1000000}
                 step={1000}
                 value={[monthlyBill]}
                 onValueChange={values => setMonthlyBill(values[0])}
-                className="mb-6"
+                className="mb-6 h-3"
               />
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">₹5,000</span>
-                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
                   <span className="text-text font-semibold">₹{monthlyBill.toLocaleString()}</span>
                 </div>
-                <span className="text-text-secondary">₹100,000</span>
+                <span className="text-text-secondary">₹10,00,000</span>
               </div>
             </div>
           </div>
@@ -84,11 +132,11 @@ const Calculator = ({ type }: CalculatorProps) => {
                 step={100}
                 value={[terraceArea]}
                 onValueChange={values => setTerraceArea(values[0])}
-                className="mb-6"
+                className="mb-6 h-3"
               />
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">500 sq ft</span>
-                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
                   <span className="text-text font-semibold">{terraceArea.toLocaleString()} sq ft</span>
                 </div>
                 <span className="text-text-secondary">10,000 sq ft</span>
@@ -108,11 +156,11 @@ const Calculator = ({ type }: CalculatorProps) => {
                 step={0.5}
                 value={[costPerUnit]}
                 onValueChange={values => setCostPerUnit(values[0])}
-                className="mb-6"
+                className="mb-6 h-3"
               />
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">₹5</span>
-                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
+                <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
                   <span className="text-text font-semibold">₹{costPerUnit.toLocaleString()}</span>
                 </div>
                 <span className="text-text-secondary">₹15</span>
