@@ -4,13 +4,13 @@ import { Linkedin } from "lucide-react";
 const founders = [
   {
     name: "Mohit Srivastava",
-    position: "Co-Founder & CEO",
+    position: "Co-Founder & CGO",
     linkedin: "https://www.linkedin.com/in/mohit-srivastava-72640314b/",
     image: null
   },
   {
     name: "Priyank Inani",
-    position: "Co-Founder & CTO",
+    position: "Co-Founder & CFO",
     linkedin: "https://www.linkedin.com/in/priyank-inani/",
     image: null
   },
@@ -22,7 +22,7 @@ const founders = [
   },
   {
     name: "Harshit Agrawal",
-    position: "Co-Founder & CFO",
+    position: "Co-Founder & CTO",
     linkedin: "https://www.linkedin.com/in/harshitnitt/",
     image: null
   }
