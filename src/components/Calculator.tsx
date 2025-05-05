@@ -8,11 +8,38 @@ interface CalculatorProps {
   type: "msme" | "investor";
 }
 
+// Helper function to format numbers according to Indian numerical system
+const formatIndianNumber = (num: number): string => {
+  // Convert number to string
+  const numStr = Math.round(num).toString();
+  
+  // For numbers less than 1000, return as is
+  if (numStr.length <= 3) {
+    return numStr;
+  }
+  
+  // For numbers 1000 and above, format with commas
+  let lastThree = numStr.substring(numStr.length - 3);
+  let remaining = numStr.substring(0, numStr.length - 3);
+  let result = '';
+  
+  // Insert comma after every two digits from right in the remaining part
+  if (remaining) {
+    result = remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+  } else {
+    result = lastThree;
+  }
+  
+  return result;
+};
+
 const Calculator = ({ type }: CalculatorProps) => {
   // MSME calculation fields
   const [monthlyBill, setMonthlyBill] = useState(10000);
   const [terraceArea, setTerraceArea] = useState(1000);
+  const [terraceAreaInput, setTerraceAreaInput] = useState("1000");
   const [costPerUnit, setCostPerUnit] = useState(8);
+  const [costPerUnitInput, setCostPerUnitInput] = useState("8");
   const [billInputValue, setBillInputValue] = useState("10000");
   
   // Investor calculation fields
@@ -44,6 +71,14 @@ const Calculator = ({ type }: CalculatorProps) => {
   }, [monthlyBill]);
 
   useEffect(() => {
+    setTerraceAreaInput(terraceArea.toString());
+  }, [terraceArea]);
+
+  useEffect(() => {
+    setCostPerUnitInput(costPerUnit.toString());
+  }, [costPerUnit]);
+
+  useEffect(() => {
     setInvestmentInputValue(investmentAmount.toString());
   }, [investmentAmount]);
 
@@ -70,6 +105,58 @@ const Calculator = ({ type }: CalculatorProps) => {
     } else {
       setMonthlyBill(10000);
       setBillInputValue("10000");
+    }
+  };
+
+  // Handle direct input change for terrace area
+  const handleTerraceAreaInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTerraceAreaInput(value);
+    
+    const numericValue = value === '' ? 0 : parseInt(value);
+    if (!isNaN(numericValue)) {
+      // Clamp the value between min and max
+      const clampedValue = Math.min(Math.max(numericValue, 500), 10000);
+      setTerraceArea(clampedValue);
+    }
+  };
+
+  // Handle blur event for terrace area input
+  const handleTerraceAreaInputBlur = () => {
+    const numericValue = terraceAreaInput === '' ? 0 : parseInt(terraceAreaInput);
+    if (!isNaN(numericValue)) {
+      const clampedValue = Math.min(Math.max(numericValue, 500), 10000);
+      setTerraceArea(clampedValue);
+      setTerraceAreaInput(clampedValue.toString());
+    } else {
+      setTerraceArea(1000);
+      setTerraceAreaInput("1000");
+    }
+  };
+
+  // Handle direct input change for cost per unit
+  const handleCostPerUnitInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCostPerUnitInput(value);
+    
+    const numericValue = value === '' ? 0 : parseFloat(value);
+    if (!isNaN(numericValue)) {
+      // Clamp the value between min and max
+      const clampedValue = Math.min(Math.max(numericValue, 5), 15);
+      setCostPerUnit(clampedValue);
+    }
+  };
+
+  // Handle blur event for cost per unit input
+  const handleCostPerUnitInputBlur = () => {
+    const numericValue = costPerUnitInput === '' ? 0 : parseFloat(costPerUnitInput);
+    if (!isNaN(numericValue)) {
+      const clampedValue = Math.min(Math.max(numericValue, 5), 15);
+      setCostPerUnit(clampedValue);
+      setCostPerUnitInput(clampedValue.toString());
+    } else {
+      setCostPerUnit(8);
+      setCostPerUnitInput("8");
     }
   };
 
@@ -146,7 +233,7 @@ const Calculator = ({ type }: CalculatorProps) => {
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">₹5,000</span>
                 <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
-                  <span className="text-text font-semibold">₹{monthlyBill.toLocaleString()}</span>
+                  <span className="text-text font-semibold">₹{formatIndianNumber(monthlyBill)}</span>
                 </div>
                 <span className="text-text-secondary">₹10,00,000</span>
               </div>
@@ -157,6 +244,22 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="terrace-area" className="block text-text-secondary mb-2">
               Terrace Area (sq ft)
             </label>
+            
+            {/* Direct input field for terrace area */}
+            <div className="mb-4">
+              <Input
+                type="number"
+                id="terrace-area-input"
+                value={terraceAreaInput}
+                onChange={handleTerraceAreaInputChange}
+                onBlur={handleTerraceAreaInputBlur}
+                min={500}
+                max={10000}
+                className="text-lg font-medium"
+                placeholder="Enter terrace area"
+              />
+            </div>
+            
             <div className="mt-6 mb-2">
               <Slider
                 id="terrace-area"
@@ -170,7 +273,7 @@ const Calculator = ({ type }: CalculatorProps) => {
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">500 sq ft</span>
                 <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
-                  <span className="text-text font-semibold">{terraceArea.toLocaleString()} sq ft</span>
+                  <span className="text-text font-semibold">{formatIndianNumber(terraceArea)} sq ft</span>
                 </div>
                 <span className="text-text-secondary">10,000 sq ft</span>
               </div>
@@ -181,6 +284,26 @@ const Calculator = ({ type }: CalculatorProps) => {
             <label htmlFor="cost-per-unit" className="block text-text-secondary mb-2">
               Current Electricity Cost (₹ per unit)
             </label>
+            
+            {/* Direct input field for cost per unit */}
+            <div className="mb-4 relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <IndianRupee className="h-5 w-5 text-text-secondary" />
+              </div>
+              <Input
+                type="number"
+                id="cost-per-unit-input"
+                value={costPerUnitInput}
+                onChange={handleCostPerUnitInputChange}
+                onBlur={handleCostPerUnitInputBlur}
+                min={5}
+                max={15}
+                step={0.5}
+                className="text-lg font-medium pl-10"
+                placeholder="Enter cost per unit"
+              />
+            </div>
+            
             <div className="mt-6 mb-2">
               <Slider
                 id="cost-per-unit"
@@ -194,7 +317,7 @@ const Calculator = ({ type }: CalculatorProps) => {
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">₹5</span>
                 <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/20 px-3 py-1 rounded-md border border-accent shadow-sm">
-                  <span className="text-text font-semibold">₹{costPerUnit.toLocaleString()}</span>
+                  <span className="text-text font-semibold">₹{costPerUnit.toFixed(1)}</span>
                 </div>
                 <span className="text-text-secondary">₹15</span>
               </div>
@@ -204,17 +327,17 @@ const Calculator = ({ type }: CalculatorProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Monthly Savings</p>
-              <p className="text-accent text-2xl font-bold">₹{monthlySavings.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+              <p className="text-accent text-2xl font-bold">₹{formatIndianNumber(monthlySavings)}</p>
             </div>
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Annual Savings</p>
-              <p className="text-accent text-2xl font-bold">₹{annualSavings.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+              <p className="text-accent text-2xl font-bold">₹{formatIndianNumber(annualSavings)}</p>
             </div>
           </div>
           
           <div className="bg-secondary/50 p-6 rounded-lg text-center">
             <p className="text-text-secondary mb-2">Estimated 5-Year Savings</p>
-            <p className="text-accent text-3xl font-bold">₹{(annualSavings * 5).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+            <p className="text-accent text-3xl font-bold">₹{formatIndianNumber(annualSavings * 5)}</p>
             <p className="text-text-secondary mt-2 text-sm">With Zero Upfront Cost</p>
           </div>
         </>
@@ -253,7 +376,7 @@ const Calculator = ({ type }: CalculatorProps) => {
               <div className="flex justify-between mt-2 relative">
                 <span className="text-text-secondary">₹10,000</span>
                 <div className="absolute left-1/2 -translate-x-1/2 -top-4 bg-accent/10 px-3 py-1 rounded border border-accent/30">
-                  <span className="text-text font-semibold">₹{investmentAmount.toLocaleString()}</span>
+                  <span className="text-text font-semibold">₹{formatIndianNumber(investmentAmount)}</span>
                 </div>
                 <span className="text-text-secondary">₹10,00,000</span>
               </div>
@@ -284,17 +407,17 @@ const Calculator = ({ type }: CalculatorProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Annual Return (12%)</p>
-              <p className="text-accent text-2xl font-bold">₹{annualReturn.toLocaleString()}</p>
+              <p className="text-accent text-2xl font-bold">₹{formatIndianNumber(annualReturn)}</p>
             </div>
             <div className="bg-primary/50 p-4 rounded-lg">
               <p className="text-text-secondary">Monthly Interest</p>
-              <p className="text-accent text-2xl font-bold">₹{monthlyReturn.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+              <p className="text-accent text-2xl font-bold">₹{formatIndianNumber(monthlyReturn)}</p>
             </div>
           </div>
           
           <div className="bg-secondary/50 p-6 rounded-lg text-center">
             <p className="text-text-secondary mb-2">Total Value After {years} Years</p>
-            <p className="text-accent text-3xl font-bold">₹{totalValue.toLocaleString()}</p>
+            <p className="text-accent text-3xl font-bold">₹{formatIndianNumber(totalValue)}</p>
             <p className="text-text-secondary mt-2 text-sm">Interest paid monthly, secured by Solar Assets</p>
           </div>
         </>
