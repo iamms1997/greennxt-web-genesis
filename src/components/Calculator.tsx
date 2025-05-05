@@ -19,9 +19,15 @@ const Calculator = ({ type }: CalculatorProps) => {
   const [investmentAmount, setInvestmentAmount] = useState(100000);
   const [years, setYears] = useState(5);
   
-  // MSME calculations with updated formula
-  const potentialCapacity = terraceArea / 500; // How many units can be generated
-  const monthlySavings = potentialCapacity * 30 * 5 * (costPerUnit / 2);
+  // MSME calculations with updated formula based on the new logic:
+  // 100 sq ft contains 1 kWh capacity which produces 5 units per day
+  const potentialCapacity = terraceArea / 100; // kWh capacity based on terrace area
+  const potentialDailyUnits = potentialCapacity * 5; // Daily units produced
+  const potentialMonthlySavings = potentialDailyUnits * (costPerUnit / 2) * 30; // Monthly savings at half price
+  const maxPossibleSavings = monthlyBill / 2; // Maximum possible savings (50% of current bill)
+  
+  // Take the minimum of potential savings and maximum possible savings
+  const monthlySavings = Math.min(potentialMonthlySavings, maxPossibleSavings);
   const annualSavings = monthlySavings * 12;
   
   // Investor calculations with fixed 14% annual return
